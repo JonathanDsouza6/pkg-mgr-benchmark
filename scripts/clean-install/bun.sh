@@ -34,6 +34,7 @@ clean_and_install() {
 display_results() {
     # local -n results_array=$1
     local results_array=("$@") # Store all arguments in an array
+
     echo "============================================"
     echo "| Run # | Installation Time (seconds) |"
     echo "============================================"
@@ -48,17 +49,19 @@ display_results() {
     max=${results_array[0]}
 
     for time in "${results_array[@]}"; do
-        total=$(awk "BEGIN {print $total + $time}")
+        total=$(echo "$total + $time" | bc)
 
         if (($(echo "$time < $min" | bc -l))); then
             min=$time
         fi
+
         if (($(echo "$time > $max" | bc -l))); then
             max=$time
         fi
     done
 
     avg=$(echo "scale=2; $total / ${#results_array[@]}" | bc)
+
     echo "Average installation time: $avg seconds"
     echo "Minimum installation time: $min seconds"
     echo "Maximum installation time: $max seconds"
@@ -79,8 +82,10 @@ echo "A 5-second pause will be added between each run."
 declare -a results
 check_bun
 
-for run in {1..2}; do
+for run in {1..5}; do
+
     echo "------------------------------------------"
+
     # Execute the function directly and capture output
     clean_and_install "$run"
 
@@ -100,17 +105,16 @@ for run in {1..2}; do
     elapsed=$(echo "$end_time - $start_time" | bc)
 
     # Format the result to 2 decimal places
-    time_taken=$(echo "$elapsed" | awk '{printf "%.2f", $0}')
+    # time_taken=$(printf "%.2f" $elapsed)
 
-    results[$((run - 1))]=$time_taken
-
+    results[$((run - 1))]=$elapsed
     echo " Start time: $start_time"
     echo " End time: $end_time"
     echo " Elapsed time: $elapsed"
-    echo "Run #$run completed in $time_taken seconds"
+    echo "Run #$run completed in $elapsed seconds"
 
     # Add a 5-second pause between runs (except after the last one)
-    if [ $run -lt 2 ]; then
+    if [ $run -lt 5 ]; then
         echo "Pausing for 5 seconds before next run..."
         sleep 5
     fi
