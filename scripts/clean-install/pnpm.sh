@@ -85,7 +85,7 @@ echo "A 5-second pause will be added between each run."
 # Run the benchmarks
 declare -a results
 check_pnpm
-for run in {1..5}; do
+for run in {1..2}; do
 
     echo "------------------------------------------"
 
@@ -107,14 +107,17 @@ for run in {1..5}; do
     # Calculate elapsed time
     elapsed=$(echo "$end_time - $start_time" | bc)
 
-    # Format the result to 2 decimal places
-    time_taken=$(printf "%.2f" $elapsed)
+    # # Format the result to 2 decimal places
+    # time_taken=$(printf "%.2f" $elapsed)
 
-    results[$((run - 1))]=$time_taken
-    echo "Run #$run completed in $time_taken seconds"
+    results[$((run - 1))]=$elapsed
+    echo " Start time: $start_time"
+    echo " End time: $end_time"
+    echo " Elapsed time: $elapsed"
+    echo "Run #$run completed in $elapsed seconds"
 
     # Add a 5-second pause between runs (except after the last one)
-    if [ $run -lt 5 ]; then
+    if [ $run -lt 2 ]; then
         echo "Pausing for 5 seconds before next run..."
         sleep 5
     fi
