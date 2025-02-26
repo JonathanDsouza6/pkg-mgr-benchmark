@@ -83,7 +83,7 @@ echo "A 5-second pause will be added between each run."
 declare -a results
 check_npm
 
-for run in {1..2}; do
+for run in {1..5}; do
     echo "------------------------------------------"
     # Execute the function directly and capture output
     clean_and_install "$run"
@@ -113,7 +113,7 @@ for run in {1..2}; do
     echo "Run #$run completed in $elapsed seconds"
 
     # Add a 5-second pause between runs (except after the last one)
-    if [ $run -lt 2 ]; then
+    if [ $run -lt 5 ]; then
         echo "Pausing for 5 seconds before next run..."
         sleep 5
     fi
