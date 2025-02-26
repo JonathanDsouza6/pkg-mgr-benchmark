@@ -1,52 +1,54 @@
 #!/bin/bash
 
-# Function to check if npm is installed
-check_npm() {
-    if ! command -v npm &>/dev/null; then
-        echo "npm is not installed. Please install Node.js which includes npm."
-        exit 1
+# Function to check if pnpm is installed
+check_pnpm() {
+    if ! command -v pnpm &>/dev/null; then
+        echo "pnpm is not installed. Installing..."
+        npm install -g pnpm
+        echo "pnpm installed successfully."
     else
-        echo "npm is already installed."
+        echo "pnpm is already installed."
     fi
 }
 
-# Function to clean and reinstall dependencies
-clean_and_install() {
-    local run_number=$1
-    echo "Run #$run_number: Cleaning up and reinstalling..."
+# Clear pnpm cache system wide
+clean_cache() {
+    echo "Clearing system-wide pnpm cache..."
+    pnpm store prune
 
-    # Print the current cache size
-    echo "Current npm cache size:"
-    npm cache verify --silent || echo "Unable to verify cache size"
+    # Clear pnpm cache in current folder
+    echo "Clearing local pnpm cache..."
+    rm -rf .pnpm-store 2>/dev/null
+}
 
-    # Purge the npm cache
-    echo "Purging npm cache..."
-    npm cache clean --force
-
-    # Verify the cache is empty
-    echo "Verifying npm cache is cleared:"
-    npm cache verify
-
-    echo "npm cache purge complete!"
-
-    # Clear all dependencies
+# Clear all dependencies
+clean_dependencies() {
     echo "Clearing dependencies..."
     find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
+}
+
+# Function to delete pnpm-lock.yaml
+clean_lockfile() {
+    echo "Deleting pnpm-lock.yaml..."
+    rm -f pnpm-lock.yaml
 }
 
 # Function to display results in a table
 display_results() {
     # local -n results_array=$1
+
     local results_array=("$@") # Store all arguments in an array
+
     echo "============================================"
     echo "| Run # | Installation Time (seconds) |"
     echo "============================================"
+
     for ((i = 0; i < ${#results_array[@]}; i++)); do
         printf "| %-5s | %-28s |\n" "$((i + 1))" "${results_array[$i]}"
     done
+
     echo "============================================"
 
-    # Calculate and display statistics
     # Calculate and display statistics
     total=0
     min=${results_array[0]}
@@ -54,39 +56,52 @@ display_results() {
 
     for time in "${results_array[@]}"; do
         total=$(echo "$total + $time" | bc)
+
         if (($(echo "$time < $min" | bc -l))); then
             min=$time
         fi
+
         if (($(echo "$time > $max" | bc -l))); then
             max=$time
         fi
     done
 
     avg=$(echo "scale=2; $total / ${#results_array[@]}" | bc)
+
     echo "Average installation time: $avg seconds"
     echo "Minimum installation time: $min seconds"
     echo "Maximum installation time: $max seconds"
 }
 
 # Main script
+
 # Check for bc (used for floating-point arithmetic)
 if ! command -v bc &>/dev/null; then
     echo "The 'bc' utility is required but not installed. Please install it first."
     exit 1
 fi
 
-echo "===== NPM Installation Benchmark ====="
-echo "This script will run the installation process 5 times and measure performance."
+echo "===== PNPM Installation Benchmark (With Cache & With Lockfile) ====="
+echo "This script will run the installation process 1 time and measure performance."
 echo "A 5-second pause will be added between each run."
 
-# Run the benchmarks
+echo "------------------------------------------"
+echo "Starting preparation..."
+echo "------------------------------------------"
+
 declare -a results
-check_npm
+check_pnpm
+clean_cache
+pnpm install
 
 for run in {1..5}; do
+
     echo "------------------------------------------"
-    # Execute the function directly and capture output
-    clean_and_install "$run"
+    echo "Run #$run"
+    echo "------------------------------------------"
+
+    # clean dependencies and lockfile
+    clean_dependencies
 
     # Run a fresh install and measure time
     echo "Installing dependencies..."
@@ -94,8 +109,8 @@ for run in {1..5}; do
     # Capture start time
     start_time=$(date +%s.%N)
 
-    # Run npm install
-    npm install
+    # Run pnpm install
+    pnpm install
 
     # Capture end time
     end_time=$(date +%s.%N)
@@ -103,13 +118,13 @@ for run in {1..5}; do
     # Calculate elapsed time
     elapsed=$(echo "$end_time - $start_time" | bc)
 
-    # Format the result to 2 decimal places
+    # # Format the result to 2 decimal places
+    # time_taken=$(printf "%.2f" $elapsed)
 
     results[$((run - 1))]=$elapsed
-
-    echo " Start time: $start_time"
-    echo " End time: $end_time"
-    echo " Elapsed time: $elapsed"
+    echo "Start time: $start_time"
+    echo "End time: $end_time"
+    echo "Elapsed time: $elapsed"
     echo "Run #$run completed in $elapsed seconds"
 
     # Add a 5-second pause between runs (except after the last one)
@@ -118,9 +133,11 @@ for run in {1..5}; do
         sleep 5
     fi
 
-    echo "------------------------------------------"
 done
+
+echo "------------------------------------------"
 
 # Display the results table
 display_results "${results[@]}"
+
 echo "Benchmark completed."

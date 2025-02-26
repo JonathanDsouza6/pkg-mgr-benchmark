@@ -1,46 +1,52 @@
 #!/bin/bash
 
-# Function to check if bun is installed
-check_bun() {
-    if ! command -v bun &>/dev/null; then
-        echo "bun is not installed. Installing..."
-        # Using curl to install bun as per their official method
-        curl -fsSL https://bun.sh/install | bash
-        echo "bun installed successfully. You may need to restart your terminal."
-        # Source the shell configuration to make bun available in current session
-        export BUN_INSTALL="$HOME/.bun"
-        export PATH="$BUN_INSTALL/bin:$PATH"
+# Function to check if pnpm is installed
+check_pnpm() {
+    if ! command -v pnpm &>/dev/null; then
+        echo "pnpm is not installed. Installing..."
+        npm install -g pnpm
+        echo "pnpm installed successfully."
     else
-        echo "bun is already installed."
+        echo "pnpm is already installed."
     fi
 }
 
-# Function to clean and reinstall dependencies
-clean_and_install() {
-    local run_number=$1
-    echo "Run #$run_number: Cleaning up and reinstalling..."
+# Clear pnpm cache system wide
+clean_cache() {
+    echo "Clearing system-wide pnpm cache..."
+    pnpm store prune
 
-    # Clear bun cache
-    echo "Clearing bun cache..."
-    bun pm cache rm
+    # Clear pnpm cache in current folder
+    echo "Clearing local pnpm cache..."
+    rm -rf .pnpm-store 2>/dev/null
+}
 
-    # Clear all dependencies
+# Function to delete pnpm-lock.yaml
+clean_lockfile() {
+    echo "Deleting pnpm-lock.yaml..."
+    rm -f pnpm-lock.yaml
+}
+
+# Clear all dependencies
+clean_dependencies() {
     echo "Clearing dependencies..."
     find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
-    rm -rf bun.lockb 2>/dev/null
 }
 
 # Function to display results in a table
 display_results() {
     # local -n results_array=$1
+
     local results_array=("$@") # Store all arguments in an array
 
     echo "============================================"
     echo "| Run # | Installation Time (seconds) |"
     echo "============================================"
+
     for ((i = 0; i < ${#results_array[@]}; i++)); do
         printf "| %-5s | %-28s |\n" "$((i + 1))" "${results_array[$i]}"
     done
+
     echo "============================================"
 
     # Calculate and display statistics
@@ -68,26 +74,34 @@ display_results() {
 }
 
 # Main script
+
 # Check for bc (used for floating-point arithmetic)
 if ! command -v bc &>/dev/null; then
     echo "The 'bc' utility is required but not installed. Please install it first."
     exit 1
 fi
 
-echo "===== Bun Installation Benchmark ====="
-echo "This script will run the installation process 5 times and measure performance."
+echo "===== PNPM Installation Benchmark (With Node Modules) ====="
+echo "This script will run the installation process 1 time and measure performance."
 echo "A 5-second pause will be added between each run."
 
-# Run the benchmarks
+echo "------------------------------------------"
+echo "Starting preparation..."
+echo "------------------------------------------"
+
 declare -a results
-check_bun
+check_pnpm
+pnnpm install
 
 for run in {1..5}; do
 
     echo "------------------------------------------"
+    echo "Run #$run"
+    echo "------------------------------------------"
 
-    # Execute the function directly and capture output
-    clean_and_install "$run"
+    # Clear all dependencies, cache, and lockfile
+    clean_cache
+    clean_lockfile
 
     # Run a fresh install and measure time
     echo "Installing dependencies..."
@@ -95,8 +109,8 @@ for run in {1..5}; do
     # Capture start time
     start_time=$(date +%s.%N)
 
-    # Run bun install
-    bun install
+    # Run pnpm install
+    pnpm install --frozen-lockfile
 
     # Capture end time
     end_time=$(date +%s.%N)
@@ -104,13 +118,13 @@ for run in {1..5}; do
     # Calculate elapsed time
     elapsed=$(echo "$end_time - $start_time" | bc)
 
-    # Format the result to 2 decimal places
+    # # Format the result to 2 decimal places
     # time_taken=$(printf "%.2f" $elapsed)
 
     results[$((run - 1))]=$elapsed
-    echo " Start time: $start_time"
-    echo " End time: $end_time"
-    echo " Elapsed time: $elapsed"
+    echo "Start time: $start_time"
+    echo "End time: $end_time"
+    echo "Elapsed time: $elapsed"
     echo "Run #$run completed in $elapsed seconds"
 
     # Add a 5-second pause between runs (except after the last one)
@@ -119,9 +133,11 @@ for run in {1..5}; do
         sleep 5
     fi
 
-    echo "------------------------------------------"
 done
+
+echo "------------------------------------------"
 
 # Display the results table
 display_results "${results[@]}"
+
 echo "Benchmark completed."

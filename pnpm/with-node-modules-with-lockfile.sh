@@ -11,21 +11,24 @@ check_pnpm() {
     fi
 }
 
-# Function to clean and reinstall dependencies
-clean_and_install() {
-    local run_number=$1
-
-    echo "Run #$run_number: Cleaning up and reinstalling..."
-
-    # Clear pnpm cache system wide
+# Clear pnpm cache system wide
+clean_cache() {
     echo "Clearing system-wide pnpm cache..."
     pnpm store prune
 
     # Clear pnpm cache in current folder
     echo "Clearing local pnpm cache..."
     rm -rf .pnpm-store 2>/dev/null
+}
 
-    # Clear all dependencies
+# Function to delete pnpm-lock.yaml
+clean_lockfile() {
+    echo "Deleting pnpm-lock.yaml..."
+    rm -f pnpm-lock.yaml
+}
+
+# Clear all dependencies
+clean_dependencies() {
     echo "Clearing dependencies..."
     find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
 }
@@ -78,19 +81,26 @@ if ! command -v bc &>/dev/null; then
     exit 1
 fi
 
-echo "===== PNPM Installation Benchmark ====="
+echo "===== PNPM Installation Benchmark (With Node Modules & With Lockfile) ====="
 echo "This script will run the installation process 1 time and measure performance."
 echo "A 5-second pause will be added between each run."
 
-# Run the benchmarks
+echo "------------------------------------------"
+echo "Starting preparation..."
+echo "------------------------------------------"
+
 declare -a results
 check_pnpm
+pnnpm install
+
 for run in {1..5}; do
 
     echo "------------------------------------------"
+    echo "Run #$run"
+    echo "------------------------------------------"
 
-    # Execute the function directly and capture output
-    clean_and_install "$run"
+    # Clear cache
+    clean_cache
 
     # Run a fresh install and measure time
     echo "Installing dependencies..."
@@ -99,7 +109,7 @@ for run in {1..5}; do
     start_time=$(date +%s.%N)
 
     # Run pnpm install
-    pnpm install
+    pnpm install --frozen-lockfile
 
     # Capture end time
     end_time=$(date +%s.%N)
@@ -111,9 +121,9 @@ for run in {1..5}; do
     # time_taken=$(printf "%.2f" $elapsed)
 
     results[$((run - 1))]=$elapsed
-    echo " Start time: $start_time"
-    echo " End time: $end_time"
-    echo " Elapsed time: $elapsed"
+    echo "Start time: $start_time"
+    echo "End time: $end_time"
+    echo "Elapsed time: $elapsed"
     echo "Run #$run completed in $elapsed seconds"
 
     # Add a 5-second pause between runs (except after the last one)
@@ -122,8 +132,9 @@ for run in {1..5}; do
         sleep 5
     fi
 
-    echo "------------------------------------------"
 done
+
+echo "------------------------------------------"
 
 # Display the results table
 display_results "${results[@]}"
