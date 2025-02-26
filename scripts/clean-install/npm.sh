@@ -104,14 +104,13 @@ for run in {1..2}; do
     elapsed=$(echo "$end_time - $start_time" | bc)
 
     # Format the result to 2 decimal places
-    time_taken=$(echo "$elapsed" | awk '{printf "%.2f", $0}')
 
-    results[$((run - 1))]=$time_taken
+    results[$((run - 1))]=$elapsed
 
     echo " Start time: $start_time"
     echo " End time: $end_time"
     echo " Elapsed time: $elapsed"
-    echo "Run #$run completed in $time_taken seconds"
+    echo "Run #$run completed in $elapsed seconds"
 
     # Add a 5-second pause between runs (except after the last one)
     if [ $run -lt 2 ]; then
