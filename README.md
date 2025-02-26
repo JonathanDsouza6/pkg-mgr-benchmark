@@ -1,4 +1,5 @@
-# pkg-mgr-benchmark
+# Paved Road Package Managers Benckmark
+
 Scripts to benchmark various package managers 
 
 # Speed Evaluation
