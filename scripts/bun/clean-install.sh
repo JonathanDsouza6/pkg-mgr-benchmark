@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Function to check if yarn is installed
-check_yarn() {
-    if ! command -v yarn &>/dev/null; then
-        echo "yarn is not installed. Please install yarn."
+# Function to check if bun is installed
+check_bun() {
+    if ! command -v bun &>/dev/null; then
+        echo "bun is not installed. Please install bun."
         exit 1
     else
-        echo "yarn is already installed."
+        echo "bun is already installed."
     fi
 }
 
@@ -85,7 +85,7 @@ echo "Starting preparation..."
 echo "------------------------------------------"
 
 declare -a results
-check_yarn
+check_bun
 
 for run in {1..5}; do
 
