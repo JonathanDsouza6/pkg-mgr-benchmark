@@ -109,7 +109,7 @@ for run in {1..5}; do
     start_time=$(date +%s.%N)
 
     # Run yarn install
-    yarn install --frozen-lockfile
+    yarn install
 
     # Capture end time
     end_time=$(date +%s.%N)
@@ -140,5 +140,3 @@ echo "------------------------------------------"
 display_results "${results[@]}"
 
 echo "Benchmark completed."
-
-
