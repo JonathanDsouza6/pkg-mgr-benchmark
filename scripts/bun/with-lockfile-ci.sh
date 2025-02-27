@@ -14,6 +14,20 @@ check_bun() {
 clean_cache() {
     echo "Clearing system-wide bun cache..."
     bun pm cache rm
+
+    # Clear Yarn cache using the built-in command
+    yarn cache clean --all
+
+    # Remove manually stored cache directories
+    rm -rf ~/.yarn/cache
+    rm -rf ~/Library/Caches/Yarn
+
+    # Clear npm cache
+    npm cache clean --force
+    rm -rf ~/.npm 2>/dev/null
+
+    # Clear pnpm cache
+    pnpm store prune
 }
 
 # Function to delete bun.lock
