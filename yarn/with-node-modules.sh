@@ -140,3 +140,5 @@ echo "------------------------------------------"
 display_results "${results[@]}"
 
 echo "Benchmark completed."
+
+
