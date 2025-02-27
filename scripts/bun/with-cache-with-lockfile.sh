@@ -22,10 +22,10 @@ clean_dependencies() {
     find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
 }
 
-# Function to delete package-lock.json
+# Function to delete bun.lock
 clean_lockfile() {
-    echo "Deleting package-lock.json..."
-    rm -f package-lock.json
+    echo "Deleting bun.lock ..."
+    rm -f bun.lock
 }
 
 # Function to display results in a table

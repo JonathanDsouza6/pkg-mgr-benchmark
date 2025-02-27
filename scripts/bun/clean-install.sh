@@ -16,10 +16,10 @@ clean_cache() {
     bun pm cache rm
 }
 
-# Function to delete package-lock.json
+# Function to delete bun.lock
 clean_lockfile() {
-    echo "Deleting package-lock.json..."
-    rm -f package-lock.json
+    echo "Deleting bun.lock ..."
+    rm -f bun.lock
 }
 
 # Clear all dependencies
