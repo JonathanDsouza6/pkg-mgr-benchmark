@@ -14,10 +14,7 @@ check_npm() {
 clean_cache() {
     echo "Clearing system-wide npm cache..."
     npm cache clean --force
-
-    # Clear npm cache in current folder
-    echo "Clearing local npm cache..."
-    rm -rf .npm 2>/dev/null
+    rm -rf ~/.npm 2>/dev/null
 }
 
 # Clear all dependencies
