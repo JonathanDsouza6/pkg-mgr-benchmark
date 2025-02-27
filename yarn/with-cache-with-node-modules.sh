@@ -13,7 +13,7 @@ check_yarn() {
 # Clear yarn cache system wide
 clean_cache() {
     echo "Clearing system-wide yarn cache..."
-    yarn cache clean --mirror
+    yarn cache clean --all
 
     # Clear yarn cache in current folder
     echo "Clearing local yarn cache..."
