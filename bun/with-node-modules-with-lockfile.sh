@@ -12,12 +12,8 @@ check_yarn() {
 
 # Clear yarn cache system wide
 clean_cache() {
-    echo "Clearing system-wide yarn cache..."
-    yarn cache clean --all
-
-    # Clear yarn cache in current folder
-    echo "Clearing local yarn cache..."
-    rm -rf .yarn 2>/dev/null
+    echo "Clearing system-wide bun cache..."
+    bun pm cache rm
 }
 
 # Function to delete package-lock.json
@@ -90,7 +86,7 @@ echo "------------------------------------------"
 
 declare -a results
 check_yarn
-yarn install
+bun install
 
 for run in {1..5}; do
 
@@ -107,8 +103,8 @@ for run in {1..5}; do
     # Capture start time
     start_time=$(date +%s.%N)
 
-    # Run yarn install
-    yarn install
+    # Run bun install
+    bun install
 
     # Capture end time
     end_time=$(date +%s.%N)
