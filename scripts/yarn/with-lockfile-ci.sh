@@ -13,11 +13,13 @@ check_yarn() {
 # Clear yarn cache system wide
 clean_cache() {
     echo "Clearing system-wide yarn cache..."
+
+    # Clear Yarn cache using the built-in command
     yarn cache clean --all
 
-    # Clear yarn cache in current folder
-    echo "Clearing local yarn cache..."
-    rm -rf .yarn 2>/dev/null
+    # Remove manually stored cache directories
+    rm -rf ~/.yarn/cache
+    rm -rf ~/Library/Caches/Yarn
 }
 
 # Function to delete package-lock.json
