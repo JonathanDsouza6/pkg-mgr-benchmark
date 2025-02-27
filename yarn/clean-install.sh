@@ -109,7 +109,7 @@ for run in {1..5}; do
     start_time=$(date +%s.%N)
 
     # Run yarn install
-    yarn install --no-audit
+    yarn install
 
     # Capture end time
     end_time=$(date +%s.%N)
