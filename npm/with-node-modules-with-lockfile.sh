@@ -80,7 +80,7 @@ if ! command -v bc &>/dev/null; then
     exit 1
 fi
 
-echo "===== PNPM Installation Benchmark (With Node Modules & With Lockfile) ====="
+echo "===== NPM Installation Benchmark (With Node Modules & With Lockfile) ====="
 echo "This script will run the installation process 1 time and measure performance."
 echo "A 5-second pause will be added between each run."
 
