@@ -105,7 +105,7 @@ for run in {1..5}; do
     start_time=$(date +%s.%N)
 
     # Run npm install
-    npm ci --no-audit
+    npm ci --no-audit --no-fund
 
     # Capture end time
     end_time=$(date +%s.%N)

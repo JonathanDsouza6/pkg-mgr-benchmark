@@ -87,7 +87,7 @@ echo "------------------------------------------"
 
 declare -a results
 check_npm
-npm install
+npm install --no-fund
 
 for run in {1..5}; do
 
@@ -105,7 +105,7 @@ for run in {1..5}; do
     start_time=$(date +%s.%N)
 
     # Run npm install
-    npm install --frozen-lockfile
+    npm install --frozen-lockfile --no-fund
 
     # Capture end time
     end_time=$(date +%s.%N)

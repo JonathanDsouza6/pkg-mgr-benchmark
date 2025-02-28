@@ -88,7 +88,15 @@ echo "------------------------------------------"
 declare -a results
 check_npm
 clean_cache
-npm install
+clean_dependencies
+clean_lockfile
+
+nmp cache verify
+
+npm install --no-audit --no-fund
+npm install --no-audit --no-fund
+
+npm cache verify
 
 for run in {1..5}; do
 
@@ -107,7 +115,7 @@ for run in {1..5}; do
     start_time=$(date +%s.%N)
 
     # Run npm install
-    npm install --no-audit
+    npm install --no-audit --no-fund
 
     # Capture end time
     end_time=$(date +%s.%N)
