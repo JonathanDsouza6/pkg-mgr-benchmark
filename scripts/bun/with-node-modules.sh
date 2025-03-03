@@ -1,86 +1,11 @@
 #!/bin/bash
 
-# Function to check if bun is installed
-check_bun() {
-    if ! command -v bun &>/dev/null; then
-        echo "bun is not installed. Please install bun."
-        exit 1
-    else
-        echo "bun is already installed."
-    fi
-}
-
-# Clear yarn cache system wide
-clean_cache() {
-    echo "Clearing system-wide bun cache..."
-    bun pm cache rm
-
-    # Clear Yarn cache using the built-in command
-    yarn cache clean --all
-
-    # Remove manually stored cache directories
-    rm -rf ~/.yarn/cache
-    rm -rf ~/Library/Caches/Yarn
-
-    # Clear npm cache
-    npm cache clean --force
-    rm -rf ~/.npm 2>/dev/null
-
-    # Clear pnpm cache
-    pnpm store prune
-}
-
-# Function to delete bun.lock
-clean_lockfile() {
-    echo "Deleting bun.lock ..."
-    rm -f bun.lock
-}
-
-# Clear all dependencies
-clean_dependencies() {
-    echo "Clearing dependencies..."
-    find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
-}
-
-# Function to display results in a table
-display_results() {
-    # local -n results_array=$1
-
-    local results_array=("$@") # Store all arguments in an array
-
-    echo "============================================"
-    echo "| Run # | Installation Time (seconds) |"
-    echo "============================================"
-
-    for ((i = 0; i < ${#results_array[@]}; i++)); do
-        printf "| %-5s | %-28s |\n" "$((i + 1))" "${results_array[$i]}"
-    done
-
-    echo "============================================"
-
-    # Calculate and display statistics
-    total=0
-    min=${results_array[0]}
-    max=${results_array[0]}
-
-    for time in "${results_array[@]}"; do
-        total=$(echo "$total + $time" | bc)
-
-        if (($(echo "$time < $min" | bc -l))); then
-            min=$time
-        fi
-
-        if (($(echo "$time > $max" | bc -l))); then
-            max=$time
-        fi
-    done
-
-    avg=$(echo "scale=2; $total / ${#results_array[@]}" | bc)
-
-    echo "Average installation time: $avg seconds"
-    echo "Minimum installation time: $min seconds"
-    echo "Maximum installation time: $max seconds"
-}
+source ../../scripts/shared/check-installation.sh
+source ../../scripts/shared/clean-cache.sh
+source ../../scripts/shared/clean-dependencies.sh
+source ../../scripts/shared/clean-lockfile.sh
+source ../../scripts/shared/display-results.sh
+source ../../scripts/shared/check-bc.sh
 
 # Main script
 
@@ -109,8 +34,8 @@ for run in {1..5}; do
     echo "------------------------------------------"
 
     # Clear all dependencies, cache, and lockfile
-    clean_cache
-    clean_lockfile
+    clean_cache_bun
+    clean_lockfile_bun
 
     # Run a fresh install and measure time
     echo "Installing dependencies..."
@@ -127,9 +52,6 @@ for run in {1..5}; do
     # Calculate elapsed time
     elapsed=$(echo "$end_time - $start_time" | bc)
 
-    # # Format the result to 2 decimal places
-    # time_taken=$(printf "%.2f" $elapsed)
-
     results[$((run - 1))]=$elapsed
     echo "Start time: $start_time"
     echo "End time: $end_time"
@@ -137,7 +59,7 @@ for run in {1..5}; do
     echo "Run #$run completed in $elapsed seconds"
 
     # Add a 5-second pause between runs (except after the last one)
-    if [ $run -lt 5 ]; then
+    if [ $run -lt 5]; then
         echo "Pausing for 5 seconds before next run..."
         sleep 5
     fi
