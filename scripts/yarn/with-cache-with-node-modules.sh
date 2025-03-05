@@ -1,11 +1,13 @@
 #!/bin/bash
 
-source ../../scripts/shared/check-installation.sh
-source ../../scripts/shared/clean-cache.sh
-source ../../scripts/shared/clean-dependencies.sh
-source ../../scripts/shared/clean-lockfile.sh
-source ../../scripts/shared/display-results.sh
-source ../../scripts/shared/check-bc.sh
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+source "$SCRIPT_DIR/../../scripts/shared/check-installation.sh"
+source "$SCRIPT_DIR/../../scripts/shared/clean-cache.sh"
+source "$SCRIPT_DIR/../../scripts/shared/clean-dependencies.sh"
+source "$SCRIPT_DIR/../../scripts/shared/clean-lockfile.sh"
+source "$SCRIPT_DIR/../../scripts/shared/display-results.sh"
+source "$SCRIPT_DIR/../../scripts/shared/check-bc.sh"
 
 echo "===== Yarn Installation Benchmark (With Cache & With Node Modules) ====="
 echo "This script will run the installation process 1 time and measure performance."
