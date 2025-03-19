@@ -38,7 +38,7 @@ for run in {1..5}; do
     start_time=$(date +%s.%N)
 
     # Run pnpm install
-    pnpm install --frozen-lockfile
+    pnpm install
 
     # Capture end time
     end_time=$(date +%s.%N)

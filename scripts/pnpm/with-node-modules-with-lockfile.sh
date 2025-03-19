@@ -19,7 +19,8 @@ echo "------------------------------------------"
 
 declare -a results
 check_pnpm
-pnnpm install
+pnpm install --lockfile-only
+pnpm install
 
 for run in {1..5}; do
 
