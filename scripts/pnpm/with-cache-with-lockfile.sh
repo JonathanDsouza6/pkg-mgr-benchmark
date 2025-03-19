@@ -19,7 +19,7 @@ echo "------------------------------------------"
 
 declare -a results
 check_pnpm
-clean_cache
+clean_cache_pnpm
 pnpm install
 
 for run in {1..5}; do
