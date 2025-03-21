@@ -18,6 +18,7 @@ clean_lockfile_pnpm() {
 
 # Function to delete package-lock.json
 clean_lockfile_yarn() {
-    echo "Deleting package-lock.json..."
+    echo "Deleting yarn.lock..."
     rm -f package-lock.json
+    rm -f yarn.lock
 }

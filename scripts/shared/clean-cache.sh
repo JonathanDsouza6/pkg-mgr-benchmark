@@ -46,3 +46,20 @@ clean_cache_yarn() {
     rm -rf ~/.yarn/cache
     rm -rf ~/Library/Caches/Yarn
 }
+
+# Clear berry cache system wide
+clean_cache_berry() {
+    echo "Clearing system-wide berry cache..."
+
+    # Clear Yarn cache using the built-in command
+    yarn cache clean --all
+
+    # Remove manually stored cache directories
+    rm -rf .yarn/cache
+    rm -rf ~/.yarn/cache
+    rm -f .yarn/install-state.gz
+    rm -f .pnp.cjs .pnp.loader.mjs
+    rm -rf ~/Library/Caches/Yarn
+    rm -rf $(yarn config get cacheFolder)
+    rm -f node_modules/.yarn-integrity
+}
