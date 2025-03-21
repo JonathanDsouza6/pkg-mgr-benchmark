@@ -158,37 +158,37 @@ Benchmark completed.
 ============================================
 | Run # | Installation Time (seconds) |
 ============================================
-| 1     | 79.0                         |
-| 2     | 74.0                         |
+| 1     | 106.0                        |
+| 2     | 81.0                         |
 | 3     | 81.0                         |
-| 4     | 84.0                         |
-| 5     | 80.0                         |
+| 4     | 104.0                        |
+| 5     | 85.0                         |
 ============================================
-Average installation time: 79.60 seconds
-Minimum installation time: 74.0 seconds
-Maximum installation time: 84.0 seconds
+Average installation time: 91.40 seconds
+Minimum installation time: 81.0 seconds
+Maximum installation time: 106.0 seconds
 Benchmark completed.
+
 ```
 
 ### `../../../scripts/yarn/with-cache.sh`
-
+ 
 ```
 ------------------------------------------
 ============================================
 | Run # | Installation Time (seconds) |
 ============================================
-| 1     | 37.0                         |
-| 2     | 32.0                         |
-| 3     | 36.0                         |
-| 4     | 34.0                         |
-| 5     | 35.0                         |
+| 1     | 50.0                         |
+| 2     | 51.0                         |
+| 3     | 44.0                         |
+| 4     | 57.0                         |
+| 5     | 47.0                         |
 ============================================
-Average installation time: 34.80 seconds
-Minimum installation time: 32.0 seconds
-Maximum installation time: 37.0 seconds
-Benchmark completed. 
+Average installation time: 49.80 seconds
+Minimum installation time: 44.0 seconds
+Maximum installation time: 57.0 seconds
+Benchmark completed.
 ```
-
 
 
 ### `../../../scripts/yarn/with-cache-with-lockfile.sh`
@@ -218,15 +218,15 @@ Benchmark completed.
 ============================================
 | Run # | Installation Time (seconds) |
 ============================================
-| 1     | 1.0                          |
-| 2     | 1.0                          |
-| 3     | 0                            |
-| 4     | 1.0                          |
-| 5     | 0                            |
+| 1     | 36.0                         |
+| 2     | 28.0                         |
+| 3     | 21.0                         |
+| 4     | 27.0                         |
+| 5     | 26.0                         |
 ============================================
-Average installation time: .60 seconds
-Minimum installation time: 0 seconds
-Maximum installation time: 1.0 seconds
+Average installation time: 27.60 seconds
+Minimum installation time: 21.0 seconds
+Maximum installation time: 36.0 seconds
 Benchmark completed.
 ```
 
@@ -252,21 +252,22 @@ Benchmark completed.
 ### `../../../scripts/yarn/with-node-modules.sh`
 
 ```
- ------------------------------------------
+------------------------------------------
 ============================================
 | Run # | Installation Time (seconds) |
 ============================================
-| 1     | 1.0                          |
-| 2     | 1.0                          |
-| 3     | 0                            |
-| 4     | 1.0                          |
-| 5     | 1.0                          |
+| 1     | 95.0                         |
+| 2     | 105.0                        |
+| 3     | 93.0                         |
+| 4     | 89.0                         |
+| 5     | 101.0                        |
 ============================================
-Average installation time: .80 seconds
-Minimum installation time: 0 seconds
-Maximum installation time: 1.0 seconds
+Average installation time: 96.60 seconds
+Minimum installation time: 89.0 seconds
+Maximum installation time: 105.0 seconds
 Benchmark completed.
 ```
+
 
  
 ### `../../../scripts/yarn/with-node-modules-with-lockfile.sh`
@@ -603,3 +604,158 @@ Minimum installation time: 12.0 seconds
 Maximum installation time: 15.0 seconds
 Benchmark completed.
 ```
+
+
+
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+
+
+
+
+## Berry (modern Yarn)
+
+### `../../../scripts/berry/clean-install.sh`
+
+```
+------------------------------------------
+============================================
+| Run # | Installation Time (seconds) |
+============================================
+| 1     | 55.0                         |
+| 2     | 48.0                         |
+| 3     | 45.0                         |
+| 4     | 52.0                         |
+| 5     | 41.0                         |
+============================================
+Average installation time: 48.20 seconds
+Minimum installation time: 41.0 seconds
+Maximum installation time: 55.0 seconds
+Benchmark completed.
+
+```
+
+### `../../../scripts/berry/with-cache.sh`
+
+```
+------------------------------------------
+============================================
+| Run # | Installation Time (seconds) |
+============================================
+| 1     | 25.0                         |
+| 2     | 31.0                         |
+| 3     | 28.0                         |
+| 4     | 30.0                         |
+| 5     | 32.0                         |
+============================================
+Average installation time: 29.20 seconds
+Minimum installation time: 25.0 seconds
+Maximum installation time: 32.0 seconds
+Benchmark completed.
+```
+
+
+
+### `../../../scripts/berry/with-cache-with-lockfile.sh`
+
+```
+------------------------------------------
+============================================
+| Run # | Installation Time (seconds) |
+============================================
+| 1     | 24.0                         |
+| 2     | 28.0                         |
+| 3     | 22.0                         |
+| 4     | 22.0                         |
+| 5     | 24.0                         |
+============================================
+Average installation time: 24.00 seconds
+Minimum installation time: 22.0 seconds
+Maximum installation time: 28.0 seconds
+Benchmark completed.
+
+```
+
+
+### `../../../scripts/berry/with-cache-with-node-modules.sh`
+
+```
+------------------------------------------
+============================================
+| Run # | Installation Time (seconds) |
+============================================
+| 1     | 9.0                          |
+| 2     | 6.0                          |
+| 3     | 6.0                          |
+| 4     | 7.0                          |
+| 5     | 6.0                          |
+============================================
+Average installation time: 6.80 seconds
+Minimum installation time: 6.0 seconds
+Maximum installation time: 9.0 seconds
+Benchmark completed.
+
+```
+
+### `../../../scripts/berry/with-lockfile-ci.sh`
+
+```
+------------------------------------------
+============================================
+| Run # | Installation Time (seconds) |
+============================================
+| 1     | 38.0                         |
+| 2     | 36.0                         |
+| 3     | 35.0                         |
+| 4     | 40.0                         |
+| 5     | 33.0                         |
+============================================
+Average installation time: 36.40 seconds
+Minimum installation time: 33.0 seconds
+Maximum installation time: 40.0 seconds
+Benchmark completed.
+```
+
+### `../../../scripts/berry/with-node-modules.sh`
+
+```
+------------------------------------------
+============================================
+| Run # | Installation Time (seconds) |
+============================================
+| 1     | 25.0                         |
+| 2     | 24.0                         |
+| 3     | 20.0                         |
+| 4     | 25.0                         |
+| 5     | 21.0                         |
+============================================
+Average installation time: 23.00 seconds
+Minimum installation time: 20.0 seconds
+Maximum installation time: 25.0 seconds
+Benchmark completed.
+```
+
+ 
+### `../../../scripts/berry/with-node-modules-with-lockfile.sh`
+
+```
+------------------------------------------
+============================================
+| Run # | Installation Time (seconds) |
+============================================
+| 1     | 17.0                         |
+| 2     | 16.0                         |
+| 3     | 17.0                         |
+| 4     | 18.0                         |
+| 5     | 18.0                         |
+============================================
+Average installation time: 17.20 seconds
+Minimum installation time: 16.0 seconds
+Maximum installation time: 18.0 seconds
+Benchmark completed.
+
+```
+
+
+
